@@ -1,0 +1,406 @@
+:root {
+  --bg-deep: #0f1b38;
+  --bg-soft: #f7f4ef;
+  --accent: #ff7b2c;
+  --accent-dark: #e46012;
+  --ink: #14213d;
+  --muted: #6c7486;
+  --card: #ffffff;
+}
+
+.landing-page {
+  min-height: 100vh;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  background: radial-gradient(circle at 15% 10%, #ffe5d0 0%, #f8f1e8 35%, #f5f6fb 100%);
+}
+
+.landing-page,
+.landing-page * {
+  box-sizing: border-box;
+}
+
+.hero-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 24px;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #13254d 0%, #1f457c 55%, #1d3f65 100%);
+  color: #f8fbff;
+  box-shadow: 0 24px 60px rgba(12, 24, 48, 0.28);
+  width: 100%;
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.landing-logo {
+  display: block;
+  width: 4.5rem;
+  height: auto;
+  margin-right: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.landing-logo-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-right: 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.brand {
+  margin: 0;
+  letter-spacing: 0.08em;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn {
+  text-decoration: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.65rem 1.2rem;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-solid {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(242, 111, 35, 0.35);
+}
+
+.btn-solid:hover {
+  background: var(--accent-dark);
+  box-shadow: 0 12px 28px rgba(242, 111, 35, 0.45);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+.hero-content {
+  padding: 3.5rem 0.5rem 2.75rem;
+  text-align: left;
+  max-width: 760px;
+  animation: riseIn 0.7s ease;
+}
+
+.hero-kicker {
+  margin: 0 0 0.6rem;
+  color: #ffd6ba;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.hero-content h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.5rem);
+  line-height: 1.08;
+  font-weight: 700;
+}
+
+.hero-copy {
+  margin-top: 1rem;
+  color: #d6e2f1;
+  font-size: 1.04rem;
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+.hero-cta {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.hero-login {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hero-login:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.feature-grid {
+  max-width: 1100px;
+  margin: 1.1rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 0.5rem;
+}
+
+.feature-card {
+  background: var(--card);
+  padding: 1.35rem;
+  border-radius: 18px;
+  border: 1px solid rgba(20, 33, 61, 0.07);
+  box-shadow: 0 12px 30px rgba(29, 52, 89, 0.08);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  box-shadow: 0 16px 40px rgba(29, 52, 89, 0.12);
+  transform: translateY(-2px);
+}
+
+.feature-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.feature-card p {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.bottom-cta {
+  max-width: 1100px;
+  margin: 1rem auto;
+  text-align: center;
+  background: #fff;
+  border-radius: 18px;
+  padding: 2.1rem 1.2rem;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  box-shadow: 0 4px 12px rgba(29, 52, 89, 0.06);
+  width: 100%;
+}
+
+.bottom-cta h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.landing-footer {
+  max-width: 1100px;
+  margin: 0.25rem auto 0;
+  text-align: center;
+  color: #5d667b;
+  font-size: 0.93rem;
+  padding: 1rem 0.5rem;
+  width: 100%;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-shell {
+    padding: 1rem;
+  }
+
+  .hero-content {
+    padding: 2.5rem 0.5rem 2rem;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-page {
+    padding: 0.75rem;
+  }
+
+  .hero-shell {
+    padding: 1.2rem;
+    border-radius: 16px;
+  }
+
+  .landing-nav {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .brand {
+    font-size: 1rem;
+  }
+
+  .hero-content {
+    padding: 2rem 0.5rem 1.5rem;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .hero-copy {
+    font-size: 0.95rem;
+  }
+
+  .hero-cta {
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+  }
+
+  .btn {
+    padding: 0.55rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .feature-card {
+    padding: 1.15rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1rem;
+  }
+
+  .bottom-cta {
+    margin: 0.75rem auto;
+    padding: 1.5rem 1rem;
+  }
+
+  .bottom-cta h2 {
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    margin-bottom: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-page {
+    padding: 0.5rem;
+  }
+
+  .hero-shell {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .brand {
+    font-size: 0.9rem;
+  }
+
+  .nav-actions {
+    gap: 0.5rem;
+  }
+
+  .btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+
+  .hero-kicker {
+    font-size: 0.75rem;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+  }
+
+  .hero-copy {
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+
+  .feature-grid {
+    gap: 0.8rem;
+    margin-top: 0.75rem;
+  }
+
+  .feature-card {
+    padding: 1rem;
+  }
+
+  .feature-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .feature-card p {
+    font-size: 0.85rem;
+  }
+
+  .bottom-cta {
+    padding: 1.2rem 0.8rem;
+    margin: 0.5rem auto;
+  }
+
+  .bottom-cta h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .landing-footer {
+    font-size: 0.85rem;
+    padding: 0.75rem 0.5rem;
+  }
+}
