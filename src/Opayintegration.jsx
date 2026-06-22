@@ -13,7 +13,7 @@ const OPayIntegration = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/create-payment", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/create-payment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

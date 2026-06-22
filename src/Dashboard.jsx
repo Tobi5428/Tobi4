@@ -61,6 +61,7 @@ const Dashboard = () => {
     setSuccess(false);
 
     try {
+      console.log('Initiating payment with', paymentData);
       // Validate inputs
       if (!paymentData.amount || !paymentData.email || !paymentData.firstName || 
           !paymentData.lastName || !paymentData.phone) {
@@ -69,7 +70,15 @@ const Dashboard = () => {
         return;
       }
 
-      const result = await initiatePayment(paymentData);
+      // Ensure amount is numeric and include a tx_ref/orderId for tracing
+      const payload = {
+        ...paymentData,
+        amount: Number(paymentData.amount),
+        tx_ref: `tx_${Date.now()}`,
+      };
+      console.log('Initiating payment with payload', payload);
+
+      const result = await initiatePayment(payload);
 
       if (result.success) {
         setSuccess(true);
@@ -91,7 +100,7 @@ const Dashboard = () => {
       }
     } catch (err) {
       setError(err.message || 'Error initiating payment');
-      console.error('Payment error:', err);
+      console.error('Payment error:', err, err.response?.data || null);
     } finally {
       setLoading(false);
     }

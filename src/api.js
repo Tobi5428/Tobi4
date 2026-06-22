@@ -25,6 +25,13 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
+    
+    // Add user-friendly error message for network errors
+    if (!error.response) {
+      error.networkError = true;
+      error.message = 'Network error: Unable to reach the server. Please check your connection and ensure the backend server is running.';
+    }
+    
     return Promise.reject(error);
   }
 );
@@ -46,12 +53,21 @@ export const registerUser = async (userData) => {
     const response = await api.post('/auth/register', userData);
     return response.data;
   } catch (error) {
-    const message = 
-      error.response?.data?.message || 
-      error.response?.data?.error ||
-      (typeof error.response?.data === 'string' ? error.response.data : null) ||
-      error.message ||
-      'Registration failed';
+    let message;
+    
+    if (error.networkError) {
+      message = error.message;
+    } else if (error.response?.status === 409) {
+      message = error.response?.data?.message || 'This email is already registered. Please use a different email.';
+    } else {
+      message = 
+        error.response?.data?.message || 
+        error.response?.data?.error ||
+        (typeof error.response?.data === 'string' ? error.response.data : null) ||
+        error.message ||
+        'Registration failed. Please try again.';
+    }
+    
     throw new Error(message);
   }
 };
@@ -76,12 +92,21 @@ export const loginUser = async (credentials) => {
     const message = data.message || data.error || 'Login failed. No token returned.';
     throw new Error(message);
   } catch (error) {
-    const message =
-      error.response?.data?.message ||
-      error.response?.data?.error ||
-      (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
-      error.message ||
-      'Login failed. Please try again.';
+    let message;
+    
+    if (error.networkError) {
+      message = error.message;
+    } else if (error.response?.status === 401) {
+      message = 'Invalid email or password. Please try again.';
+    } else {
+      message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+        error.message ||
+        'Login failed. Please try again.';
+    }
+    
     throw new Error(message);
   }
 };
@@ -130,12 +155,25 @@ export const initiatePayment = async (paymentData) => {
     const response = await api.post('/payment/initiate', paymentData);
     return response.data;
   } catch (error) {
-    const message = 
-      error.response?.data?.message || 
-      error.response?.data?.error ||
-      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+    const status = error.response?.status;
+    const respData = error.response?.data;
+
+    const baseMessage =
+      respData?.message ||
+      respData?.error ||
+      (typeof respData === 'string' ? respData : null) ||
       error.message ||
       'Failed to initiate payment';
+
+    let message = status ? `Request failed with status ${status}: ${baseMessage}` : baseMessage;
+    try {
+      if (respData && typeof respData === 'object') {
+        message += ` | serverResponse=${JSON.stringify(respData)}`;
+      }
+    } catch (e) {
+      // ignore JSON stringify errors
+    }
+
     throw new Error(message);
   }
 };
@@ -249,6 +287,38 @@ export const sendInternationalTransfer = async (transferData) => {
       (typeof error.response?.data === 'string' ? error.response.data : null) ||
       error.message ||
       'Failed to send international transfer';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Initiate a generic transfer (server-side will decide local/international)
+ * @param {Object} transferData - Transfer details
+ */
+export const initiateTransfer = async (transferData) => {
+  try {
+    const response = await api.post('/transfer/initiate', transferData);
+    return response.data;
+  } catch (error) {
+    const status = error.response?.status;
+    const respData = error.response?.data;
+
+    const baseMessage =
+      respData?.message ||
+      respData?.error ||
+      (typeof respData === 'string' ? respData : null) ||
+      error.message ||
+      'Failed to initiate transfer';
+
+    let message = status ? `Request failed with status ${status}: ${baseMessage}` : baseMessage;
+    try {
+      if (respData && typeof respData === 'object') {
+        message += ` | serverResponse=${JSON.stringify(respData)}`;
+      }
+    } catch (e) {
+      // ignore
+    }
+
     throw new Error(message);
   }
 };

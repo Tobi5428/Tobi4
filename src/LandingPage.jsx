@@ -66,9 +66,11 @@ const LandingPage = () => {
             <Link to="/signup" className="btn btn-solid">
               Create Free Account
             </Link>
-            <Link to="/login" className="btn btn-ghost hero-login">
-              I already have an account
-            </Link>
+            <div className="login-section">
+              <Link to="/login" className="btn btn-ghost hero-login">
+                I already have an account
+              </Link>
+            </div>
           </div>
         </section>
       </header>

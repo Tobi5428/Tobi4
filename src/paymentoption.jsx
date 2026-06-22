@@ -18,7 +18,7 @@ const PaymentOption = () => {
 
   const payNow = () => {
     if (!window.FlutterwaveCheckout) {
-      console.error("Flutterwave script not loaded yet.");
+      console.error("Flutterwave script is not loaded yet.");
       alert("Payment script is still loading. Please try again in a moment.");
       return;
     }
