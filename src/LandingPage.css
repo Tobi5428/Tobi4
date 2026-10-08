@@ -17,6 +17,16 @@
   background: radial-gradient(circle at 15% 10%, #ffe5d0 0%, #f8f1e8 35%, #f5f6fb 100%);
 }
 
+.landing-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
 .landing-page,
 .landing-page * {
   box-sizing: border-box;
@@ -43,6 +53,7 @@
 .brand-logo {
   display: inline-flex;
   align-items: center;
+  gap: 0.15rem;
   text-decoration: none;
 }
 
@@ -71,14 +82,20 @@
 
 .brand {
   margin: 0;
-  letter-spacing: 0.08em;
-  font-size: 1.15rem;
-  font-weight: 700;
+  letter-spacing: 0.11em;
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 2px 14px rgba(8, 15, 31, 0.35);
 }
 
 .nav-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
+  justify-content: flex-end;
 }
 
 .btn {
@@ -101,6 +118,13 @@
 
 .btn:active {
   transform: translateY(0);
+}
+
+.btn:focus-visible,
+.btn-outline-dark:focus-visible,
+.brand-logo:focus-visible {
+  outline: 3px solid #ffd6ba;
+  outline-offset: 3px;
 }
 
 .btn-solid {
@@ -239,6 +263,131 @@
   color: var(--ink);
 }
 
+/* Business section */
+.btn-business {
+  background: #fff;
+  color: var(--ink);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 20px rgba(12, 24, 48, 0.2);
+}
+
+.btn-business:hover {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 26px rgba(12, 24, 48, 0.28);
+}
+
+.btn-business-ghost {
+  border-color: rgba(255, 255, 255, 0.35);
+  font-size: 0.88rem;
+}
+
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.business-section {
+  max-width: 1100px;
+  margin: 1rem auto;
+  background: linear-gradient(135deg, #13254d 0%, #1f457c 60%, #1d3f65 100%);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  color: #f8fbff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-shadow: 0 16px 48px rgba(12, 24, 48, 0.18);
+}
+
+.business-section-text {
+  flex: 1 1 320px;
+  max-width: 560px;
+}
+
+.business-kicker {
+  color: #ffd6ba;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  font-size: 0.82rem;
+  margin: 0 0 0.5rem;
+}
+
+.business-section-text h2 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.business-section-text p {
+  color: #d6e2f1;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+
+.business-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.btn-outline-dark {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  padding: 0.65rem 1.2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-outline-dark:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+.business-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 0 0 auto;
+}
+
+.business-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  color: #f8fbff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .business-section {
+    flex-direction: column;
+    padding: 1.8rem 1.2rem;
+  }
+
+  .business-badges {
+    width: 100%;
+  }
+}
+
 .landing-footer {
   max-width: 1100px;
   margin: 0.25rem auto 0;
@@ -297,11 +446,12 @@
   }
 
   .brand {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .hero-content {
     padding: 2rem 0.5rem 1.5rem;
+    text-align: center;
   }
 
   .hero-content h1 {
@@ -315,10 +465,12 @@
   .hero-cta {
     gap: 0.8rem;
     margin-top: 1.2rem;
+    align-items: center;
   }
 
   .login-section {
     gap: 0.4rem;
+    align-items: center;
   }
 
   .btn {
@@ -362,7 +514,8 @@
   }
 
   .brand {
-    font-size: 0.9rem;
+    font-size: 1rem;
+    letter-spacing: 0.09em;
   }
 
   .nav-actions {
@@ -418,5 +571,16 @@
   .landing-footer {
     font-size: 0.85rem;
     padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page *,
+  .landing-page *::before,
+  .landing-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

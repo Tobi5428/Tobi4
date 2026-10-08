@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { sendLocalTransfer, sendInternationalTransfer, getBankList } from "./api";
+import { useAccountLimits } from "./hooks/useAccountLimits";
 
 export default function Transfer() {
   const [form, setForm] = useState({
@@ -14,6 +15,10 @@ export default function Transfer() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [banks, setBanks] = useState([]);
+  const [limitWarning, setLimitWarning] = useState("");
+
+  // Import account limits hook
+  const { remaining, validateAmount } = useAccountLimits();
 
   // Load bank list on component mount
   useEffect(() => {
@@ -39,6 +44,37 @@ export default function Transfer() {
     }));
     setError("");
     setSuccess("");
+    
+    // Check limit warning on amount change
+    if (name === "amount" && value) {
+      checkLimitWarning(parseFloat(value));
+    }
+  };
+
+  const checkLimitWarning = async (amount) => {
+    if (!amount || amount <= 0) {
+      setLimitWarning("");
+      return;
+    }
+
+    try {
+      const validation = await validateAmount(amount, "outgoing");
+      if (validation.ok && !validation.validation.allowed) {
+        setLimitWarning(validation.validation.reason);
+      } else if (remaining) {
+        // Show warning if amount is close to limit (90% or more)
+        if (amount > remaining.dailyOutgoingRemaining) {
+          setLimitWarning(`Amount exceeds remaining daily outgoing limit (₦${remaining.dailyOutgoingRemaining?.toLocaleString() || 0})`);
+        } else if (amount > remaining.singleTransaction) {
+          setLimitWarning(`Single transaction limit is ₦${remaining.singleTransaction?.toLocaleString() || 0}`);
+        } else {
+          setLimitWarning("");
+        }
+      }
+    } catch (err) {
+      console.error("Error checking limit:", err);
+      setLimitWarning("");
+    }
   };
 
   const validateForm = () => {
@@ -58,6 +94,18 @@ export default function Transfer() {
       setError("Please enter a valid amount");
       return false;
     }
+
+    // Check if there's a limit warning that should block submission
+    const amount = parseFloat(form.amount);
+    if (remaining && amount > remaining.singleTransaction) {
+      setError(`Single transaction limit is ₦${remaining.singleTransaction?.toLocaleString() || 0}`);
+      return false;
+    }
+    if (remaining && amount > remaining.dailyOutgoingRemaining) {
+      setError(`Daily outgoing limit exceeded. Remaining: ₦${remaining.dailyOutgoingRemaining?.toLocaleString() || 0}`);
+      return false;
+    }
+
     return true;
   };
 
@@ -160,6 +208,19 @@ export default function Transfer() {
           marginBottom: "15px"
         }}>
           {success}
+        </div>
+      )}
+
+      {limitWarning && !error && (
+        <div style={{ 
+          color: "#856404", 
+          backgroundColor: "#fff3cd", 
+          padding: "10px", 
+          borderRadius: "4px",
+          marginBottom: "15px",
+          border: "1px solid #ffeeba"
+        }}>
+          ⚠️ {limitWarning}
         </div>
       )}
 

@@ -1,0 +1,234 @@
+.notifications-page {
+  min-height: 100vh;
+  padding: 1.2rem;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 187, 134, 0.35) 0%, rgba(255, 187, 134, 0) 42%),
+    radial-gradient(circle at 88% 86%, rgba(46, 91, 151, 0.24) 0%, rgba(46, 91, 151, 0) 46%),
+    linear-gradient(145deg, #f8f2e8 0%, #ebf3fd 100%);
+}
+
+.notifications-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.notifications-header {
+  border-radius: 18px;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #13254d 0%, #1f457c 55%, #1d3f65 100%);
+  color: #f8fbff;
+  box-shadow: 0 20px 48px rgba(20, 33, 61, 0.22);
+}
+
+.notifications-header h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+}
+
+.notifications-header p {
+  margin: 0.5rem 0 0;
+  color: #cddcf1;
+}
+
+.notifications-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.15rem;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  box-shadow: 0 10px 28px rgba(20, 33, 61, 0.08);
+}
+
+.notifications-card h3 {
+  margin: 0 0 0.9rem;
+  color: #14213d;
+}
+
+.notif-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.notif-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: #2a3957;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.notif-form input,
+.notif-form textarea {
+  width: 100%;
+  border: 1px solid #d4dceb;
+  border-radius: 10px;
+  padding: 0.72rem 0.82rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #14213d;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notif-form input:focus,
+.notif-form textarea:focus {
+  outline: none;
+  border-color: #2e5b97;
+  box-shadow: 0 0 0 3px rgba(46, 91, 151, 0.12);
+}
+
+.notif-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.notif-toggles {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.notif-toggles .toggle-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #e2e8f4;
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  color: #1f2f4c;
+  font-weight: 500;
+}
+
+.notif-toggles input[type='checkbox'] {
+  accent-color: #1f457c;
+}
+
+.notif-submit {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.72rem 1rem;
+  width: fit-content;
+  font-weight: 700;
+  color: #fff;
+  background: #ff7b2c;
+  box-shadow: 0 10px 24px rgba(242, 111, 35, 0.3);
+  cursor: pointer;
+}
+
+.notif-submit:hover:not(:disabled) {
+  background: #e46012;
+}
+
+.notif-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.notif-alert {
+  margin-bottom: 0.8rem;
+  border-radius: 10px;
+  padding: 0.72rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.notif-alert p {
+  margin: 0;
+}
+
+.notif-alert-error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-left: 4px solid #ef4444;
+}
+
+.notif-alert-success {
+  background: #dcfce7;
+  color: #14532d;
+  border-left: 4px solid #16a34a;
+}
+
+.notif-alert-warn {
+  background: #fff7db;
+  color: #854d0e;
+  border-left: 4px solid #f59e0b;
+}
+
+.notif-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.notif-item {
+  border: 1px solid #e5ebf6;
+  border-radius: 12px;
+  padding: 0.82rem;
+  background: #fcfdff;
+}
+
+.notif-item h4 {
+  margin: 0;
+  color: #14213d;
+}
+
+.notif-item p {
+  margin: 0.45rem 0;
+  color: #3a4c6b;
+}
+
+.notif-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.notif-badge {
+  font-size: 0.78rem;
+  padding: 0.24rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.notif-status-sent {
+  background: #dcfce7;
+  color: #14532d;
+}
+
+.notif-status-queued {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.notif-status-failed {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+.notif-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: #5e6f8a;
+  font-size: 0.82rem;
+}
+
+.notif-empty {
+  color: #5e6f8a;
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .notifications-page {
+    padding: 0.8rem;
+  }
+
+  .notif-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .notif-submit {
+    width: 100%;
+  }
+}

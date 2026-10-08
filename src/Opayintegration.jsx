@@ -12,8 +12,11 @@ const OPayIntegration = () => {
       return;
     }
 
+    const apiBase = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '/api' : '');
+    const paymentUrl = `${apiBase.replace(/\/+$/, '')}/create-payment`;
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/create-payment`, {
+      const response = await fetch(paymentUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,0 +1,283 @@
+.biz-signup-page {
+  min-height: 100vh;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 123, 44, 0.18), transparent 42%),
+    radial-gradient(circle at 90% 90%, rgba(19, 37, 77, 0.22), transparent 46%),
+    linear-gradient(160deg, #f6f8fc 0%, #f2f6ff 45%, #eef2f9 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.biz-signup-shell {
+  width: min(1120px, 100%);
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  box-shadow: 0 25px 60px rgba(20, 33, 61, 0.18);
+  background: #fff;
+}
+
+.biz-signup-brand {
+  background: linear-gradient(140deg, #102248 0%, #1b3e76 55%, #0e2f56 100%);
+  color: #f8fbff;
+  padding: 38px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.biz-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.biz-brand-logo {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.biz-brand-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.biz-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.biz-logo {
+  width: 90px;
+  height: auto;
+  border-radius: 16px;
+}
+
+.biz-link-row {
+  text-align: center;
+  margin-top: 14px;
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.biz-link-row a {
+  color: #ff7b2c;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.biz-link-row a:hover {
+  color: #e46012;
+}
+
+.biz-kicker {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  color: #ffd9bf;
+  font-weight: 700;
+}
+
+.biz-signup-brand h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 2.7vw, 2.25rem);
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.biz-signup-brand p {
+  margin: 0;
+  color: #d7e5f8;
+  line-height: 1.7;
+}
+
+.biz-feature-list {
+  list-style: none;
+  margin: 24px 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.biz-feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.94rem;
+  color: #eef5ff;
+}
+
+.biz-feature-list li::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffb276;
+  flex-shrink: 0;
+}
+
+.biz-alt-link {
+  display: inline-block;
+  color: #ffe4d1;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.biz-alt-link:hover {
+  color: #fff;
+}
+
+.biz-signup-card {
+  padding: 34px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+}
+
+.biz-signup-card h3 {
+  margin: 0;
+  color: #13254d;
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.biz-subtitle {
+  margin: 8px 0 20px;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.biz-alert {
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+}
+
+.biz-alert-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.biz-alert-success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.biz-form {
+  display: grid;
+  gap: 14px;
+}
+
+.biz-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.biz-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #1e293b;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.biz-input {
+  width: 100%;
+  border: 1px solid #d9e0ea;
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-size: 0.95rem;
+  color: #0f172a;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.biz-input:focus,
+.biz-input:focus-visible {
+  outline: none;
+  border-color: #ff7b2c;
+  box-shadow: 0 0 0 4px rgba(255, 123, 44, 0.16);
+}
+
+.biz-password-wrap {
+  position: relative;
+}
+
+.biz-password-wrap .biz-input {
+  padding-right: 64px;
+}
+
+.biz-toggle {
+  position: absolute;
+  right: 12px;
+  top: 36px;
+  border: 0;
+  background: transparent;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.biz-submit {
+  margin-top: 6px;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #ff7b2c, #eb661a);
+  color: #fff;
+  font-size: 0.96rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(235, 102, 26, 0.28);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.biz-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(235, 102, 26, 0.36);
+}
+
+.biz-submit:disabled {
+  opacity: 0.68;
+  cursor: not-allowed;
+}
+
+@media (max-width: 980px) {
+  .biz-signup-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .biz-signup-brand {
+    padding: 28px 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .biz-signup-page {
+    padding: 14px;
+  }
+
+  .biz-signup-card {
+    padding: 22px 16px;
+  }
+
+  .biz-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

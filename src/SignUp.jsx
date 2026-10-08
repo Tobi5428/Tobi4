@@ -1,7 +1,9 @@
 ﻿import React, { useState } from 'react'
 import { registerUser } from './api'
+import { executeRecaptcha } from './recaptchaV3'
 import { Link, useNavigate } from 'react-router-dom'
 import './AuthPages.css'
+import logo from './assets/jega-logo.jpeg'
 
 function SignUp() {
   const navigate = useNavigate()
@@ -44,15 +46,20 @@ function SignUp() {
     setLoading(true)
     
     try {
+      console.info('[reCAPTCHA v3] Executing signup action.')
+      const recaptchaToken = await executeRecaptcha('signup')
+      console.info('[reCAPTCHA v3] Signup token generated; submitting registration.')
       await registerUser({
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone,
         email: formData.email,
         password: formData.password,
+        recaptchaToken,
       })
       navigate('/login')
     } catch (err) {
+      console.error('[Signup] Registration was not completed:', err)
       const message = 
         typeof err === 'string' 
           ? err
@@ -78,6 +85,9 @@ function SignUp() {
         </aside>
 
         <section className="auth-form-pane">
+          <div className="auth-top-logo-wrap">
+            <img src={logo} alt="JEGA logo" className="auth-top-logo" />
+          </div>
           <p className="auth-kicker">Get Started</p>
           <h3>Create Account</h3>
           <p className="auth-subtitle">Join JEGA and take control of your money.</p>

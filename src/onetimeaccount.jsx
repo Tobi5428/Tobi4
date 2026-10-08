@@ -6,7 +6,8 @@ const OneTimeAccount = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const API_URL = `${import.meta.env.VITE_API_URL}/one-time-account`;
+    const apiBase = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '/api' : '');
+    const API_URL = `${apiBase.replace(/\/+$/, '')}/one-time-account`;
 
     const fetchAccount = async () => {
       try {

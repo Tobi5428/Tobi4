@@ -2,6 +2,9 @@
 import { loginUser } from './api';
 import { Link, useNavigate } from 'react-router-dom';
 import './AuthPages.css';
+import logo from './assets/jega-logo.jpeg';
+
+const OTP_CHALLENGE_STORAGE_KEY = 'pendingLoginChallenge';
 
 function Login() {
   const navigate = useNavigate();
@@ -25,9 +28,25 @@ function Login() {
     setError('');
     setLoading(true);
 
+    // Force OTP step for each new login attempt.
+    localStorage.removeItem('token');
+    sessionStorage.removeItem(OTP_CHALLENGE_STORAGE_KEY);
+
     try {
-      await loginUser(credentials);
-      navigate('/dashboard');
+      const result = await loginUser({
+        email: credentials.email,
+        password: credentials.password,
+      });
+
+      if (result?.verificationRequired) {
+        sessionStorage.setItem(OTP_CHALLENGE_STORAGE_KEY, JSON.stringify(result));
+        navigate('/verify-login-otp', { state: { challenge: result } });
+        return;
+      }
+
+      if (result?.token) {
+        navigate('/dashboard');
+      }
     } catch (err) {
       const message =
         typeof err === 'string'
@@ -52,20 +71,24 @@ function Login() {
         </aside>
 
         <section className="auth-form-pane">
+          <div className="auth-top-logo-wrap">
+            <img src={logo} alt="JEGA logo" className="auth-top-logo" />
+          </div>
           <p className="auth-kicker">Account Access</p>
           <h3>Login</h3>
           <p className="auth-subtitle">Continue where you left off.</p>
 
           {error && <p className="auth-error">{error}</p>}
 
-          <form className="auth-form" onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit} autoComplete="on">
             <input
-              type="email"
+              type="text"
               name="email"
-              placeholder="Email address"
+              placeholder="Email or username"
               value={credentials.email}
               onChange={handleChange}
               required
+              autoComplete="Email"
             />
             <input
               type="password"
@@ -74,8 +97,12 @@ function Login() {
               value={credentials.password}
               onChange={handleChange}
               required
+              autoComplete="current-password"
             />
-            <button className="auth-submit" type="submit">Login</button>
+            <button className="auth-submit" type="submit" disabled={loading}>{loading ? 'Checking...' : 'Login'}</button>
+            <p className="auth-forgot-link">
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </p>
           </form>
 
           <p className="auth-switch">

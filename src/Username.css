@@ -1,0 +1,208 @@
+.username-page {
+  min-height: 100vh;
+  padding: 1.2rem;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255, 195, 138, 0.32) 0%, rgba(255, 195, 138, 0) 40%),
+    radial-gradient(circle at 90% 90%, rgba(31, 69, 124, 0.22) 0%, rgba(31, 69, 124, 0) 44%),
+    linear-gradient(145deg, #f7f1e7 0%, #edf3fc 100%);
+}
+
+.username-shell {
+  max-width: 560px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.username-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-radius: 18px;
+  padding: 1.2rem;
+  color: #f8fbff;
+  background: linear-gradient(135deg, #13254d 0%, #1f457c 55%, #1d3f65 100%);
+  box-shadow: 0 18px 48px rgba(20, 33, 61, 0.22);
+}
+
+.username-header h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+}
+
+.username-header p {
+  margin: 0.4rem 0 0;
+  color: #d2def1;
+}
+
+.username-back-link {
+  color: #ffd6ba;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.username-back-link:hover { color: #fff; }
+
+.username-current {
+  background: #edf3fc;
+  border: 1px solid #c5d6ef;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: #24395e;
+}
+
+.username-current strong {
+  color: #1f457c;
+}
+
+.username-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.2rem;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  box-shadow: 0 10px 28px rgba(20, 33, 61, 0.1);
+}
+
+.username-card h3 {
+  margin: 0 0 0.9rem;
+  color: #14213d;
+}
+
+.username-form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.username-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+  color: #2a3957;
+  font-weight: 600;
+}
+
+.username-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d4dceb;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.username-input-wrap:focus-within {
+  border-color: #2e5b97;
+  box-shadow: 0 0 0 3px rgba(46, 91, 151, 0.12);
+}
+
+.username-prefix {
+  padding: 0 0.7rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2e5b97;
+  background: #f0f4fb;
+  border-right: 1px solid #d4dceb;
+  user-select: none;
+  line-height: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.username-input-wrap input {
+  flex: 1;
+  border: 0;
+  outline: none;
+  padding: 0.72rem 0.82rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #14213d;
+  background: transparent;
+}
+
+.username-counter {
+  font-size: 0.8rem;
+  color: #7a8fa8;
+  font-weight: 400;
+  text-align: right;
+}
+
+.username-counter.warn { color: #b45309; }
+
+.username-rules {
+  margin: 0;
+  padding: 0 0 0 1.1rem;
+  display: grid;
+  gap: 0.3rem;
+  list-style: disc;
+}
+
+.username-rules li {
+  font-size: 0.87rem;
+  color: #7a8fa8;
+  transition: color 0.2s ease;
+}
+
+.username-rules li.rule-ok {
+  color: #15803d;
+}
+
+.username-rules li.rule-ok::marker {
+  content: '✓ ';
+}
+
+.username-save-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.74rem 1.1rem;
+  width: fit-content;
+  color: #fff;
+  background: #ff7b2c;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(242, 111, 35, 0.3);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.username-save-btn:hover:not(:disabled) {
+  background: #e46012;
+  transform: translateY(-1px);
+}
+
+.username-save-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.username-alert {
+  margin: 0 0 0.2rem;
+  border-radius: 10px;
+  padding: 0.72rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.username-alert-error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-left: 4px solid #ef4444;
+}
+
+.username-alert-success {
+  background: #dcfce7;
+  color: #14532d;
+  border-left: 4px solid #16a34a;
+}
+
+@media (max-width: 580px) {
+  .username-page { padding: 0.85rem; }
+  .username-header, .username-card { border-radius: 12px; padding: 1rem; }
+  .username-save-btn { width: 100%; justify-content: center; }
+}

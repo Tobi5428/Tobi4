@@ -13,12 +13,14 @@ import Notifications from './Notifications'
 import Reports from './Reports'
 import Editing from './Editing'
 import Privacy from './Privacy'
+import Admin from './Admin'
 import Contact from './Contact'
 import ForgotPassword from './ForgotPassword'
 import ResetPassword from './ResetPassword'
 import Support from './Support'
 import Terms from './Terms'
 import VerifyEmail from './VerifyEmail'
+import VerifyLoginOtp from './VerifyLoginOtp'
 import Username from './Username'
 import Settings from './Settings'
 import Blog from './Blog'
@@ -40,6 +42,13 @@ import Exchange from './exchange'
 import Opayintegration from './Opayintegration'
 import PaymentOption from './paymentoption'
 import OneTimeAccount from './onetimeaccount'
+import BusinessSignup from './services/BussinessSignup.jsx'
+import BusinessLogin from './services/BussinessLogin.jsx'
+import TransactionPin from './TransactionPin.jsx'
+import ReferralLink from './components/AccountLimits/Referralink.jsx'
+import GoogleRecaptcha from './GoogleRecaptcha.jsx'
+import  Electricity from './Electricity.jsx'
+
 
 const App = () => {
   return (
@@ -48,6 +57,7 @@ const App = () => {
         <Route path='/' element={<LandingPage />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/verify-login-otp' element={<VerifyLoginOtp />} />
         <Route path='/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path='/logout' element={<Logout />} />
         <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
@@ -57,6 +67,7 @@ const App = () => {
         <Route path='/reports' element={<Reports />} />
         <Route path='/editing' element={<Editing />} />
         <Route path='/privacy' element={<Privacy />} />
+        <Route path='/admin' element={<PrivateRoute><Admin /></PrivateRoute>} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/support' element={<Support />} />
@@ -84,7 +95,13 @@ const App = () => {
         <Route path='/opay-integration' element={<Opayintegration />} />
         <Route path='/payment-option' element={<PaymentOption />} />
         <Route path='/one-time-account' element={<OneTimeAccount />} />
+        <Route path='/business-signup' element={<BusinessSignup />} />
+        <Route path='/business-login' element={<BusinessLogin />} />
         <Route path='*' element={<LandingPage />} />
+        <Route path='/transaction-pin' element={<TransactionPin />} />
+        <Route path='/referral-link' element={<ReferralLink />} />
+        <Route path='/google-recaptcha' element={<GoogleRecaptcha />} />
+        <Route path='/electricity' element={<Electricity />} />
       </Routes>
     </HashRouter>
   )

@@ -6,8 +6,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: (() => {
-      // Use local backend when LOCAL_BACKEND=true is set in the environment
-      const useLocal = process.env.LOCAL_BACKEND === 'true';
+      // Use the local backend by default; set LOCAL_BACKEND=false for the hosted API.
+      const useLocal = String(process.env.LOCAL_BACKEND || process.env.Local_Backend || 'true').toLowerCase() !== 'false';
       const target = useLocal ? 'http://localhost:5000' : 'https://ayomide2-backend.onrender.com';
       return {
         '/api': {
@@ -15,6 +15,37 @@ export default defineConfig({
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+        // Proxy auth endpoints (used directly as /auth/...) to avoid CORS in dev
+        '/auth': {
+          target,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path, // keep /auth prefix
+        },
+        '/notifications': {
+          target,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path,
+        },
+        '/payment': {
+          target,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path,
+        },
+        '/transfer': {
+          target,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path,
+        },
+        '/flutterwave': {
+          target,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path,
         },
       };
     })(),

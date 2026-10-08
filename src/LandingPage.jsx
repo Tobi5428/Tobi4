@@ -39,7 +39,6 @@ const LandingPage = () => {
                 alt="JEGA logo" 
                 className="landing-logo"
                 onError={handleImageError}
-                loading="lazy"
               />
             ) : (
               <div className="landing-logo-fallback">JEGA</div>
@@ -47,6 +46,9 @@ const LandingPage = () => {
             <h2 className="brand">JEGA</h2>
           </Link>
           <div className="nav-actions">
+            <Link to="/business-login" className="btn btn-ghost btn-business-ghost">
+              Business Login
+            </Link>
             <Link to="/login" className="btn btn-ghost">
               Login
             </Link>
@@ -63,9 +65,14 @@ const LandingPage = () => {
             One clean dashboard for transfers, bill payments, savings goals, and account security.
           </p>
           <div className="hero-cta">
-            <Link to="/signup" className="btn btn-solid">
-              Create Free Account
-            </Link>
+            <div className="hero-cta-row">
+              <Link to="/signup" className="btn btn-solid">
+                Create Free Account
+              </Link>
+              <Link to="/business-signup" className="btn btn-business">
+                Open Business Account
+              </Link>
+            </div>
             <div className="login-section">
               <Link to="/login" className="btn btn-ghost hero-login">
                 I already have an account
@@ -75,21 +82,45 @@ const LandingPage = () => {
         </section>
       </header>
 
-      <section className="feature-grid">
-        {features.map((feature) => (
-          <article key={feature.id} className="feature-card">
-            <h3>{feature.title}</h3>
-            <p>{feature.description}</p>
-          </article>
-        ))}
-      </section>
+      <main className="landing-main">
+        <section className="feature-grid" aria-label="JEGA banking features">
+          {features.map((feature) => (
+            <article key={feature.id} className="feature-card">
+              <h3>{feature.title}</h3>
+              <p>{feature.description}</p>
+            </article>
+          ))}
+        </section>
 
-      <section className="bottom-cta">
-        <h2>Start your better banking experience today.</h2>
-        <Link to="/signup" className="btn btn-solid">
-          Sign Up Now
-        </Link>
-      </section>
+        <section className="business-section">
+          <div className="business-section-text">
+            <p className="business-kicker">For Businesses</p>
+            <h2>Power your business with JEGA</h2>
+            <p>Accept payments, manage payroll, track expenses, and grow your business — all from one powerful dashboard.</p>
+            <div className="business-cta-row">
+              <Link to="/business-signup" className="btn btn-solid">
+                Create Business Account
+              </Link>
+              <Link to="/business-login" className="btn btn-outline-dark">
+                Business Login
+              </Link>
+            </div>
+          </div>
+          <div className="business-badges">
+            <div className="business-badge"><span aria-hidden="true">&#9989;</span> Accept card &amp; bank payments</div>
+            <div className="business-badge"><span aria-hidden="true">&#9989;</span> Mass disbursements &amp; payroll</div>
+            <div className="business-badge"><span aria-hidden="true">&#9989;</span> Business wallet &amp; virtual accounts</div>
+            <div className="business-badge"><span aria-hidden="true">&#9989;</span> Real-time transaction monitoring</div>
+          </div>
+        </section>
+
+        <section className="bottom-cta">
+          <h2>Start your better banking experience today.</h2>
+          <Link to="/signup" className="btn btn-solid">
+            Sign Up Now
+          </Link>
+        </section>
+      </main>
 
       <footer className="landing-footer">
         <p>&copy; 2026 JEGA. All rights reserved.</p>
@@ -99,4 +130,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-

@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+// Use /api in development so all requests pass through the Vite proxy.
+// In production use `VITE_API_BASE_URL` when provided.
+const resolvedBaseURL = import.meta.env.DEV
+  ? '/api'
+  : (import.meta.env.VITE_API_BASE_URL || '');
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: resolvedBaseURL,
   headers: {
     'Content-Type': 'application/json'
   },
@@ -21,7 +27,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !error.config?.skipAuthRedirect) {
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
@@ -46,6 +52,7 @@ api.interceptors.response.use(
  * @param {string} userData.email - User email
  * @param {string} userData.password - User password
  * @param {string} userData.phone - User phone number
+ * @param {string} userData.recaptchaToken - reCAPTCHA v3 signup token
  * @returns {Promise} - Registration response
  */
 export const registerUser = async (userData) => {
@@ -81,8 +88,12 @@ export const registerUser = async (userData) => {
  */
 export const loginUser = async (credentials) => {
   try {
-    const response = await api.post('/auth/login', credentials);
+    const response = await api.post('/auth/login', credentials, { skipAuthRedirect: true });
     const data = response.data || {};
+    if (data.verificationRequired) {
+      return data;
+    }
+
     const token = data.token || data.accessToken || data.data?.token || data.data?.accessToken;
     if (token) {
       localStorage.setItem('token', token);
@@ -112,10 +123,239 @@ export const loginUser = async (credentials) => {
 };
 
 /**
- * Logout user
+ * Verify login OTP and create final login session
+ * @param {Object} payload - OTP verification payload
+ * @param {string} payload.challengeId - Pending login challenge ID
+ * @param {string} payload.otp - OTP code from email
+ * @returns {Promise} - Login response with token
+ */
+export const verifyLoginOtp = async (payload) => {
+  try {
+    const response = await api.post('/auth/verify-login-otp', payload, { skipAuthRedirect: true });
+    const data = response.data || {};
+    const token = data.token || data.accessToken || data.data?.token || data.data?.accessToken;
+    if (token) {
+      localStorage.setItem('token', token);
+      return { ...data, token };
+    }
+
+    throw new Error(data.message || 'Verification failed. No token returned.');
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+      error.message ||
+      'Unable to verify login code.';
+
+    const enhanced = new Error(message);
+    enhanced.attemptsRemaining = error.response?.data?.attemptsRemaining;
+    throw enhanced;
+  }
+};
+
+/**
+ * Resend login OTP for an existing challenge
+ * @param {string} challengeId - Current login challenge ID
+ * @returns {Promise} - New challenge response
+ */
+export const resendLoginOtp = async (challengeId) => {
+  try {
+    const response = await api.post('/auth/resend-login-otp', { challengeId }, { skipAuthRedirect: true });
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+      error.message ||
+      'Unable to resend verification code.';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Request password reset link
+ * @param {string} email - User email
+ * @returns {Promise} - API response
+ */
+export const forgotPassword = async (email) => {
+  try {
+    const response = await api.post('/auth/forgot-password', { email: email.trim().toLowerCase() });
+    return response.data;
+  } catch (error) {
+    let message;
+
+    if (error.networkError) {
+      message = error.message;
+    } else {
+      message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+        error.message ||
+        'Unable to send reset link. Please try again.';
+    }
+
+    throw new Error(message);
+  }
+};
+
+/**
+ * Reset account password with reset token
+ * @param {Object} payload - Reset payload
+ * @param {string} payload.token - Password reset token
+ * @param {string} payload.email - Account email
+ * @param {string} payload.password - New password
+ * @returns {Promise} - API response
+ */
+export const resetPassword = async (payload) => {
+  try {
+    const response = await api.post('/auth/reset-password', {
+      token: payload.token,
+      email: payload.email.trim().toLowerCase(),
+      password: payload.password,
+    });
+    return response.data;
+  } catch (error) {
+    let message;
+
+    if (error.networkError) {
+      message = error.message;
+    } else {
+      message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+        error.message ||
+        'Unable to reset password. Please try again.';
+    }
+
+    throw new Error(message);
+  }
+};
+
+/**
+ * Request account email change
+ * @param {Object} payload - Email change request
+ * @param {string} payload.currentEmail - Current account email
+ * @param {string} payload.newEmail - New email to verify
+ * @returns {Promise} - API response
+ */
+export const requestEmailChange = async (payload) => {
+  try {
+    const response = await api.post('/auth/request-email-change', payload);
+    return response.data;
+  } catch (error) {
+    let message;
+
+    if (error.networkError) {
+      message = error.message;
+    } else {
+      message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+        error.message ||
+        'Unable to request email change. Please try again.';
+    }
+
+    throw new Error(message);
+  }
+};
+
+/**
+ * Set or update the username for the current user
+ * @param {string} username - Desired username
+ * @returns {Promise} - API response
+ */
+export const setUsername = async (username) => {
+  try {
+    const response = await api.put('/auth/set-username', { username });
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+      error.message ||
+      'Unable to update username.';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Update user profile on the server
+ * @param {Object} profileData - Profile fields to update
+ * @returns {Promise} - API response
+ */
+export const updateProfile = async (profileData) => {
+  try {
+    const response = await api.put('/auth/update-profile', profileData);
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+      error.message ||
+      'Unable to update profile.';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Send notification to me and/or customer
+ * @param {Object} payload - Notification payload
+ * @returns {Promise} - API response
+ */
+export const sendNotification = async (payload) => {
+  try {
+    const response = await api.post('/notifications/send', payload);
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+      error.message ||
+      'Unable to send notification.';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Fetch notification list
+ * @returns {Promise} - Notification response
+ */
+export const fetchNotifications = async () => {
+  try {
+    const response = await api.get('/notifications');
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : undefined) ||
+      error.message ||
+      'Unable to fetch notifications.';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Logout user — clears local token and invalidates server-side session
  */
 export const logoutUser = () => {
+  const token = localStorage.getItem('token');
+  // Clear token immediately so PrivateRoute redirects right away
   localStorage.removeItem('token');
+  sessionStorage.removeItem('pendingLoginChallenge');
+  // Fire-and-forget: invalidate the session on the server
+  api.post('/auth/logout', {}, {
+    skipAuthRedirect: true,
+    ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+  }).catch(() => {});
 };
 
 /**
@@ -183,9 +423,12 @@ export const initiatePayment = async (paymentData) => {
  * @param {string} transactionId - Flutterwave transaction ID
  * @returns {Promise} - Verification response
  */
-export const verifyPayment = async (transactionId) => {
+export const verifyPayment = async (transaction, providerTransactionId) => {
   try {
-    const response = await api.post('/payment/verify', { transactionId });
+    const payload = typeof transaction === 'object' && transaction !== null
+      ? transaction
+      : { tx_ref: transaction, providerTransactionId };
+    const response = await api.post('/payment/verify', payload);
     return response.data;
   } catch (error) {
     const message = 
@@ -232,6 +475,159 @@ export const getPaymentStats = async () => {
       (typeof error.response?.data === 'string' ? error.response.data : null) ||
       error.message ||
       'Failed to fetch payment statistics';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Fetch risk events for admin review
+ * @param {Object} params - Optional query params
+ */
+export const getRiskEvents = async (params = {}) => {
+  try {
+    const response = await api.get('/payment/risk/events', { params });
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to fetch risk events';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Fetch active risk configuration
+ */
+export const getRiskConfig = async () => {
+  try {
+    const response = await api.get('/payment/risk/config');
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to fetch risk configuration';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Fetch risk state for a specific user
+ * @param {string} userId - User identifier
+ */
+export const getRiskState = async (userId) => {
+  try {
+    const response = await api.get(`/payment/risk/state/${encodeURIComponent(userId)}`);
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to fetch user risk state';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Unblock a user from risk restrictions
+ * @param {string} userId - User identifier
+ */
+export const unblockRiskUser = async (userId) => {
+  try {
+    const response = await api.post('/payment/risk/unblock', { userId });
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to unblock user';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Update allowlist status for a user
+ * @param {string} userId - User identifier
+ * @param {boolean} allow - Allowlist state
+ */
+export const setRiskAllowlist = async (userId, allow) => {
+  try {
+    const response = await api.post('/payment/risk/allowlist', { userId, allow });
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to update allowlist status';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Fetch all transactions pending manual review
+ */
+export const getPendingReviews = async () => {
+  try {
+    const response = await api.get('/payment/reviews/pending');
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to fetch pending reviews';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Approve a transaction under manual review
+ * @param {string} transactionId - Transaction identifier
+ * @param {string} [note] - Optional reviewer note
+ */
+export const approveReview = async (transactionId, note = '') => {
+  try {
+    const response = await api.post(`/payment/reviews/${encodeURIComponent(transactionId)}/approve`, { reviewerNote: note });
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to approve transaction';
+    throw new Error(message);
+  }
+};
+
+/**
+ * Reject a transaction under manual review
+ * @param {string} transactionId - Transaction identifier
+ * @param {string} [note] - Optional reviewer note
+ */
+export const rejectReview = async (transactionId, note = '') => {
+  try {
+    const response = await api.post(`/payment/reviews/${encodeURIComponent(transactionId)}/reject`, { reviewerNote: note });
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      (typeof error.response?.data === 'string' ? error.response.data : null) ||
+      error.message ||
+      'Failed to reject transaction';
     throw new Error(message);
   }
 };
