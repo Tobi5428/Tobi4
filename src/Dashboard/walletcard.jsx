@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Eye, EyeOff, Plus, ArrowDownToLine, Send, Landmark } from 'lucide-react';
-import { initiateTransfer, createVirtualAccount } from '../services/Flutterwaveservice';
+import { initiateTransfer, createVirtualAccount } from '../services/FlutterwaveService';
 import { getCurrentUser, initiatePayment, verifyPayment } from '../api';
 
 function WalletCard({ balance }) {
